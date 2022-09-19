@@ -18,6 +18,11 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "stdio.h"
+#include "string.h"
+#include "LCD_16x2.h"
+#include "JoyStick.h"
+#include "JoyStick_cfg.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -39,6 +44,8 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
+//ADC_HandleTypeDef hadc3;
+
 UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
@@ -49,6 +56,7 @@ UART_HandleTypeDef huart2;
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_USART2_UART_Init(void);
+//static void MX_ADC3_Init(int channel2);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -59,13 +67,14 @@ static void MX_USART2_UART_Init(void);
 /* USER CODE END 0 */
 
 /**
- * @brief  The application entry point.
- * @retval int
- */
+  * @brief  The application entry point.
+  * @retval int
+  */
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-
+  uint16_t raw[2];
+  char MSG[10];
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -87,13 +96,16 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_USART2_UART_Init();
+  //MX_ADC3_Init(0);
   /* USER CODE BEGIN 2 */
+  //JoyStick_INIT();
   LCD_Init();
   LCD_Clear();
-  LCD_Set_Cursor(1, 1);
-  LCD_Write_String("Bon appetit");
-  LCD_Set_Cursor(2, 1);
-  LCD_Write_String("   Bouille   ");
+  JoyStick_INIT();
+//  LCD_Set_Cursor(1, 1);
+//  LCD_Write_String(" TATA MAIS  ");
+//  LCD_Set_Cursor(2, 1);
+//  LCD_Write_String(" WESH... ");
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -101,39 +113,38 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-//    LCD_SR();  HAL_Delay(450);
-//            LCD_SR();  HAL_Delay(450);
-//            LCD_SR();  HAL_Delay(450);
-//            LCD_SR();  HAL_Delay(450);
-//
-//            LCD_SL();  HAL_Delay(450);
-//            LCD_SL();  HAL_Delay(450);
-//            LCD_SL();  HAL_Delay(450);
-//            LCD_SL();  HAL_Delay(450);
+    JoyStick_Read(raw);
+           sprintf(MSG,"%d, %d", raw[0], raw[1]);
+           LCD_Clear();
+           LCD_Set_Cursor(1, 1);
+           LCD_Write_String(MSG);
+           HAL_Delay(50);
+
+
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
 }
 
 /**
- * @brief System Clock Configuration
- * @retval None
- */
+  * @brief System Clock Configuration
+  * @retval None
+  */
 void SystemClock_Config(void)
 {
-  RCC_OscInitTypeDef RCC_OscInitStruct = { 0 };
-  RCC_ClkInitTypeDef RCC_ClkInitStruct = { 0 };
+  RCC_OscInitTypeDef RCC_OscInitStruct = {0};
+  RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
 
   /** Configure the main internal regulator output voltage
-   */
+  */
   if (HAL_PWREx_ControlVoltageScaling(PWR_REGULATOR_VOLTAGE_SCALE1) != HAL_OK)
   {
     Error_Handler();
   }
 
   /** Initializes the RCC Oscillators according to the specified parameters
-   * in the RCC_OscInitTypeDef structure.
-   */
+  * in the RCC_OscInitTypeDef structure.
+  */
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
   RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
@@ -150,8 +161,9 @@ void SystemClock_Config(void)
   }
 
   /** Initializes the CPU, AHB and APB buses clocks
-   */
-  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
+  */
+  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
+                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
@@ -164,10 +176,57 @@ void SystemClock_Config(void)
 }
 
 /**
- * @brief USART2 Initialization Function
- * @param None
- * @retval None
- */
+  * @brief ADC3 Initialization Function
+  * @param None
+  * @retval None
+  */
+//static void MX_ADC3_Init(ADC_TypeDef * ADC_Instance, uint32_t ADC_Channel)
+//{
+//
+//  ADC_ChannelConfTypeDef sConfig = {0};
+//
+//  /** Common config
+//  */
+//  hadc3.Instance = ADC_Instance;
+//  hadc3.Init.ClockPrescaler = ADC_CLOCK_ASYNC_DIV12;
+//  hadc3.Init.Resolution = ADC_RESOLUTION_12B;
+//  hadc3.Init.DataAlign = ADC_DATAALIGN_RIGHT;
+//  hadc3.Init.ScanConvMode = ADC_SCAN_DISABLE;
+//  hadc3.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
+//  hadc3.Init.LowPowerAutoWait = DISABLE;
+//  hadc3.Init.ContinuousConvMode = DISABLE;
+//  hadc3.Init.NbrOfConversion = 1;
+//  hadc3.Init.DiscontinuousConvMode = DISABLE;
+//  hadc3.Init.ExternalTrigConv = ADC_SOFTWARE_START;
+//  hadc3.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
+//  hadc3.Init.DMAContinuousRequests = DISABLE;
+//  hadc3.Init.Overrun = ADC_OVR_DATA_PRESERVED;
+//  hadc3.Init.OversamplingMode = DISABLE;
+//  if (HAL_ADC_Init(&hadc3) != HAL_OK)
+//  {
+//    Error_Handler();
+//  }
+//
+//  /** Configure Regular Channel
+//  */
+//  sConfig.Channel = ADC_Channel;
+//  sConfig.Rank = ADC_REGULAR_RANK_1;
+//  sConfig.SamplingTime = ADC_SAMPLETIME_2CYCLES_5;
+//  sConfig.SingleDiff = ADC_SINGLE_ENDED;
+//  sConfig.OffsetNumber = ADC_OFFSET_NONE;
+//  sConfig.Offset = 0;
+//  if (HAL_ADC_ConfigChannel(&hadc3, &sConfig) != HAL_OK)
+//  {
+//    Error_Handler();
+//  }
+//
+//}
+
+/**
+  * @brief USART2 Initialization Function
+  * @param None
+  * @retval None
+  */
 static void MX_USART2_UART_Init(void)
 {
 
@@ -199,13 +258,13 @@ static void MX_USART2_UART_Init(void)
 }
 
 /**
- * @brief GPIO Initialization Function
- * @param None
- * @retval None
- */
+  * @brief GPIO Initialization Function
+  * @param None
+  * @retval None
+  */
 static void MX_GPIO_Init(void)
 {
-  GPIO_InitTypeDef GPIO_InitStruct = { 0 };
+  GPIO_InitTypeDef GPIO_InitStruct = {0};
 
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOC_CLK_ENABLE();
@@ -229,6 +288,12 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(LD2_GPIO_Port, &GPIO_InitStruct);
 
+  /*Configure GPIO pin : PB6 */
+  GPIO_InitStruct.Pin = GPIO_PIN_6;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
 }
 
 /* USER CODE BEGIN 4 */
@@ -236,9 +301,9 @@ static void MX_GPIO_Init(void)
 /* USER CODE END 4 */
 
 /**
- * @brief  This function is executed in case of error occurrence.
- * @retval None
- */
+  * @brief  This function is executed in case of error occurrence.
+  * @retval None
+  */
 void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */

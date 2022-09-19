@@ -6,6 +6,8 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
 ../Core/Src/DWT_Delay.c \
+../Core/Src/JoyStick.c \
+../Core/Src/JoyStick_cfg.c \
 ../Core/Src/LCD16x2.c \
 ../Core/Src/LCD_16x2_cfg.c \
 ../Core/Src/main.c \
@@ -17,6 +19,8 @@ C_SRCS += \
 
 OBJS += \
 ./Core/Src/DWT_Delay.o \
+./Core/Src/JoyStick.o \
+./Core/Src/JoyStick_cfg.o \
 ./Core/Src/LCD16x2.o \
 ./Core/Src/LCD_16x2_cfg.o \
 ./Core/Src/main.o \
@@ -28,6 +32,8 @@ OBJS += \
 
 C_DEPS += \
 ./Core/Src/DWT_Delay.d \
+./Core/Src/JoyStick.d \
+./Core/Src/JoyStick_cfg.d \
 ./Core/Src/LCD16x2.d \
 ./Core/Src/LCD_16x2_cfg.d \
 ./Core/Src/main.d \
@@ -45,7 +51,7 @@ Core/Src/%.o Core/Src/%.su: ../Core/Src/%.c Core/Src/subdir.mk
 clean: clean-Core-2f-Src
 
 clean-Core-2f-Src:
-	-$(RM) ./Core/Src/DWT_Delay.d ./Core/Src/DWT_Delay.o ./Core/Src/DWT_Delay.su ./Core/Src/LCD16x2.d ./Core/Src/LCD16x2.o ./Core/Src/LCD16x2.su ./Core/Src/LCD_16x2_cfg.d ./Core/Src/LCD_16x2_cfg.o ./Core/Src/LCD_16x2_cfg.su ./Core/Src/main.d ./Core/Src/main.o ./Core/Src/main.su ./Core/Src/stm32l4xx_hal_msp.d ./Core/Src/stm32l4xx_hal_msp.o ./Core/Src/stm32l4xx_hal_msp.su ./Core/Src/stm32l4xx_it.d ./Core/Src/stm32l4xx_it.o ./Core/Src/stm32l4xx_it.su ./Core/Src/syscalls.d ./Core/Src/syscalls.o ./Core/Src/syscalls.su ./Core/Src/sysmem.d ./Core/Src/sysmem.o ./Core/Src/sysmem.su ./Core/Src/system_stm32l4xx.d ./Core/Src/system_stm32l4xx.o ./Core/Src/system_stm32l4xx.su
+	-$(RM) ./Core/Src/DWT_Delay.d ./Core/Src/DWT_Delay.o ./Core/Src/DWT_Delay.su ./Core/Src/JoyStick.d ./Core/Src/JoyStick.o ./Core/Src/JoyStick.su ./Core/Src/JoyStick_cfg.d ./Core/Src/JoyStick_cfg.o ./Core/Src/JoyStick_cfg.su ./Core/Src/LCD16x2.d ./Core/Src/LCD16x2.o ./Core/Src/LCD16x2.su ./Core/Src/LCD_16x2_cfg.d ./Core/Src/LCD_16x2_cfg.o ./Core/Src/LCD_16x2_cfg.su ./Core/Src/main.d ./Core/Src/main.o ./Core/Src/main.su ./Core/Src/stm32l4xx_hal_msp.d ./Core/Src/stm32l4xx_hal_msp.o ./Core/Src/stm32l4xx_hal_msp.su ./Core/Src/stm32l4xx_it.d ./Core/Src/stm32l4xx_it.o ./Core/Src/stm32l4xx_it.su ./Core/Src/syscalls.d ./Core/Src/syscalls.o ./Core/Src/syscalls.su ./Core/Src/sysmem.d ./Core/Src/sysmem.o ./Core/Src/sysmem.su ./Core/Src/system_stm32l4xx.d ./Core/Src/system_stm32l4xx.o ./Core/Src/system_stm32l4xx.su
 
 .PHONY: clean-Core-2f-Src
 
